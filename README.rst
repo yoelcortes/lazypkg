@@ -35,14 +35,16 @@ Getting started
 
 LazyPkg objects are straight forward. First assume the following package structure:
 
-package/
-  __init__.py
-  module.py
-  ...
-  subpackage/
+::
+
+  package/
     __init__.py
-    submodule.py
+    module.py
     ...
+    subpackage/
+      __init__.py
+      submodule.py
+      ...
   
 Here is an example implementation of a LazyPkg object in the package __init__.py file:
      
