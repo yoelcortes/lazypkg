@@ -46,25 +46,33 @@ LazyPkg objects are straight forward. First assume the following package structu
       submodule.py
       ...
   
+Say the subpackage __init__.py file looks like this:
+  
+.. code-block:: python
+   
+   from . import submodule
+   __all__ = ['submodule']
+   print('imported subpackage')
+   
 Here is an example implementation of a LazyPkg object in the package __init__.py file:
      
 .. code-block:: python
    
-   >>> from lazypkg import LazyPkg
-   >>> from .module import object0, object1
-   >>> __all__ = ['object0', 'object1']
-   >>> LazyPkg(__name__, ['subpackage'])
-   # -> Converts the package into a LazyPkg object and lazy imports 'subpackage'
+   from lazypkg import LazyPkg
+   from .module import obj
+   __all__ = ['obj']
+   LazyPkg(__name__, ['subpackage'])
+   # This converts the package into a LazyPkg object and lazy imports 'subpackage'   
 
 When the subpackage is accessed, only then will it be imported:
 
 .. code-block:: python
    
    >>> import package # Subpackages are not imported
-   >>> package.object0
+   >>> package.obj
    # -> Works just like an ordinary package
    >>> package.subpackage
-   # -> This imports the subpackage
+   imported subpackage
    
 Additionally, subpackage object are directly accessible:
    
