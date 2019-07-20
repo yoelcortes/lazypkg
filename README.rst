@@ -14,7 +14,7 @@ lazypkg: lazy import modules and subpackages
 What is lazypkg?
 ----------------
 
-lazypkg features the LazyPkg, a ModuleType object that lazy imports subpackages and allows access to subpackage objects.
+lazypkg features the LazyPkg object, a ModuleType object that lazy imports subpackages and allows access to subpackage objects.
 
 Installation
 ------------

@@ -18,9 +18,11 @@ class LazyPkg(ModuleType):
         **__name__:** [str] Name of module.
         
         **subpackages:** iterable[str] Names of subpackages to be lazy imported.
+        
+        **delete:** iterable[str] Objects to be deleted from package.
     
     """
-    def __new__(cls, __name__, subpackages):
+    def __new__(cls, __name__, subpackages, delete=('LazyPkg',)):
         self = sys.modules[__name__]
         if hasattr(self, '__all__'):
             __all__ = self.__all__
@@ -34,6 +36,7 @@ class LazyPkg(ModuleType):
         else:
             self.__all__ = list(subpackages)
         self.__class__ = LazyPkg
+        for i in delete: delattr(self, i)
     
     def __dir__(self):
         return self.__all__ + list(self.__dict__)
