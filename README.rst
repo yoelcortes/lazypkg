@@ -45,14 +45,6 @@ LazyPkg objects are straight forward. First assume the following package structu
       __init__.py
       submodule.py
       ...
-  
-Say the subpackage __init__.py file looks like this:
-  
-.. code-block:: python
-   
-   from . import submodule
-   __all__ = ['submodule']
-   print('imported subpackage')
    
 Here is an example implementation of a LazyPkg object in the package __init__.py file:
      
@@ -63,6 +55,14 @@ Here is an example implementation of a LazyPkg object in the package __init__.py
    __all__ = ['obj']
    LazyPkg(__name__, ['subpackage'])
    # This converts the package into a LazyPkg object and lazy imports 'subpackage'   
+
+Say the subpackage __init__.py file looks like this:
+  
+.. code-block:: python
+   
+   from . import submodule
+   __all__ = ['submodule']
+   print('imported subpackage')   
 
 When the subpackage is accessed, only then will it be imported:
 
