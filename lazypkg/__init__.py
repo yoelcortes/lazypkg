@@ -36,19 +36,24 @@ class LazyPkg(ModuleType):
         else:
             self.__all__ = list(subpackages)
         self.__class__ = LazyPkg
+        self.__import_attempts = set()
         for i in delete: delattr(self, i)
     
     def __dir__(self):
-        return self.__all__ + list(self.__dict__)
+        return set(self.__all__ + list(self.__dict__))
     
     def __getattr__(self, name):
-        try: attr = import_module('.'+name, self.__package__)
-        except ImportError:
-            for i in self.__all__:
-                module = getattr(self, i)
-                if isinstance(module, ModuleType) and hasattr(module, name):
-                    attr = getattr(module, name)
-                    break
+        attempts = self.__import_attempts
+        if name not in attempts:
+            attempts.add(name)
+            try: attr = import_module('.'+name, self.__package__)
+            except ImportError:
+                for i in self.__all__:
+                    module = getattr(self, i)
+                    if isinstance(module, ModuleType) and hasattr(module, name):
+                        attr = getattr(module, name)
+                        break
+        attempts.clear()
         try: setattr(self, name, attr)
         except NameError:
             raise AttributeError(f"module {self.__name__} has no attribute '{name}'")

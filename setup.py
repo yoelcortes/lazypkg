@@ -10,7 +10,7 @@ setup(
     name='lazypkg',
     packages=['lazypkg'],
     license='MIT',
-    version='1.0',
+    version='1.1',
     description='lazy import modules and subpackages',
     long_description=open('README.rst').read(),
     author='Yoel Cortes-Pena',
