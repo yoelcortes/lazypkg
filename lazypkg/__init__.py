@@ -43,19 +43,24 @@ class LazyPkg(ModuleType):
         return set(self.__all__ + list(self.__dict__))
     
     def __getattr__(self, name):
+        self.__import_error = None
         attempts = self.__import_attempts
-        if name not in attempts:
-            attempts.add(name)
-            try: attr = import_module('.'+name, self.__package__)
-            except ImportError:
-                for i in self.__all__:
-                    module = getattr(self, i)
-                    if isinstance(module, ModuleType) and hasattr(module, name):
-                        attr = getattr(module, name)
-                        break
+        attempts.add(name)
+        try:
+            attr = import_module('.'+name, self.__package__)
+        except ModuleNotFoundError:
+            if name in attempts:
+                raise ImportError(f"cannot import name '{name}'")
+            not_found = True
+            for i in self.__all__:
+                module = getattr(self, i)
+                if isinstance(module, ModuleType) and hasattr(module, name):
+                    attr = getattr(module, name)
+                    not_found = False
+                    break
+            if not_found:
+                raise ImportError(f"cannot import name '{name}'")
         attempts.clear()
-        try: setattr(self, name, attr)
-        except NameError:
-            raise AttributeError(f"module {self.__name__} has no attribute '{name}'")
+        setattr(self, name, attr)
         return attr
     
