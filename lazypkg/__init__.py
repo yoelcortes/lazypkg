@@ -45,12 +45,13 @@ class LazyPkg(ModuleType):
     def __getattr__(self, name):
         self.__import_error = None
         attempts = self.__import_attempts
-        attempts.add(name)
         try:
             attr = import_module('.'+name, self.__package__)
         except ModuleNotFoundError:
             if name in attempts:
                 raise ImportError(f"cannot import name '{name}'")
+            else:
+                attempts.add(name)
             not_found = True
             for i in self.__all__:
                 module = getattr(self, i)
