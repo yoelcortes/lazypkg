@@ -1,6 +1,6 @@
 Metadata-Version: 1.2
 Name: lazypkg
-Version: 1.2
+Version: 1.3
 Summary: lazy import modules and subpackages
 Home-page: https://github.com/yoelcortes/lazypkg
 Author: Yoel Cortes-Pena

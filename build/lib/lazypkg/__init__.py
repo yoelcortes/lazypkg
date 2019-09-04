@@ -32,7 +32,7 @@ class LazyPkg(ModuleType):
             try:
                 __all__.extend(subpackages)    
             except AttributeError:
-                RuntimeError("'{__name__}.__all__'  must be a list")
+                RuntimeError("'{__name__}.__all__' must be a list")
         else:
             self.__all__ = list(subpackages)
         self.__class__ = LazyPkg
@@ -49,7 +49,7 @@ class LazyPkg(ModuleType):
             attr = import_module('.'+name, self.__package__)
         except ModuleNotFoundError:
             if name in attempts:
-                raise ImportError(f"cannot import name '{name}'")
+                raise AttributeError(f"'{type(self).__name__}' object has no attribute {name}'")
             else:
                 attempts.add(name)
             not_found = True
@@ -60,8 +60,9 @@ class LazyPkg(ModuleType):
                     not_found = False
                     break
             if not_found:
-                raise ImportError(f"cannot import name '{name}'")
-        attempts.clear()
+                raise AttributeError(f"'{type(self).__name__}' object has no attribute {name}'")
+        finally:
+            attempts.discard(name)
         setattr(self, name, attr)
         return attr
     
